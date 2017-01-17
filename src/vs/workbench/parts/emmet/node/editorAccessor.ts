@@ -33,7 +33,7 @@ export class EditorAccessor implements emmet.Editor {
 
 	private _hasMadeEdits: boolean;
 
-	private emmetSupportedModes = ['html', 'xhtml', 'css', 'xml', 'xsl', 'haml', 'jade', 'jsx', 'slim', 'scss', 'sass', 'less', 'stylus', 'styl'];
+	private emmetSupportedModes = ['html', 'css', 'xml', 'xsl', 'haml', 'jade', 'jsx', 'slim', 'scss', 'sass', 'less', 'stylus', 'styl'];
 
 	constructor(languageIdentifierResolver: ILanguageIdentifierResolver, editor: ICommonCodeEditor, syntaxProfiles: any, excludedLanguages: String[], grammars: IGrammarContributions) {
 		this._languageIdentifierResolver = languageIdentifierResolver;
@@ -155,7 +155,9 @@ export class EditorAccessor implements emmet.Editor {
 		// user can overwrite the syntax using the emmet syntaxProfiles setting
 		let profile = this.getSyntaxProfile(syntax);
 		if (profile) {
-			return profile;
+			// xhtml is not a valid syntax. It's only a profile to be used to define html output
+			// as described http://docs.emmet.io/customization/syntax-profiles
+			return profile === 'xhtml' ? 'html' : profile;
 		}
 
 		if (this.emmetSupportedModes.indexOf(syntax) !== -1) {
